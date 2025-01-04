@@ -4,7 +4,7 @@ import NotFound from '../not-found/not-found.tsx';
 import { NearPlaces } from '../../components/near-places/near-places.tsx';
 import CommentForm from '../../components/comment-form/comment-form.tsx';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchComments, fetchNearbyOffers, fetchOffer } from '../../store/api-actions.ts';
+import {changeFavoriteState, fetchComments, fetchNearbyOffers, fetchOffer} from '../../store/api-actions.ts';
 import { useEffect, useState } from 'react';
 import { DetailedOffer, Offers } from '../../types/offer.ts';
 import { Comments } from '../../types/comment.ts';
@@ -19,6 +19,7 @@ export default function OfferPage() {
   const [nearbyOffers, setNearbyOffers] = useState<Offers>([]);
   const [needFetchComments, setNeedFetchComments] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
+  const [isChangedFavorite, setIsChangedFavorite] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
   const city = useAppSelector((state) => state.city);
@@ -54,6 +55,13 @@ export default function OfferPage() {
       setNeedFetchComments(false);
     }
   }, [needFetchComments, dispatch, offerId]);
+
+  useEffect(() => {
+    if (isChangedFavorite){
+      dispatch(changeFavoriteState({offerId: currentOffer!.id, isFavorite: currentOffer!.isFavorite}));
+      setIsChangedFavorite(false);
+    }
+  }, [isChangedFavorite, dispatch, currentOffer]);
 
   if (isDataLoading) {
     return <div>Loading...</div>;
@@ -152,6 +160,7 @@ export default function OfferPage() {
                     type="button"
                     onClick={() => {
                       setCurrentOffer({...currentOffer, isFavorite: !currentOffer.isFavorite});
+                      setIsChangedFavorite(true);
                     }}
                   >
                     <svg className="offer__bookmark-icon" width="31" height="33">

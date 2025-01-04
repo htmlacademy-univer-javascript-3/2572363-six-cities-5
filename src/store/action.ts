@@ -12,8 +12,6 @@ export const requireAuthorization = createAction<AuthorizationStatus>('user/requ
 
 export const setDataLoadingStatus = createAction<boolean>('data/setDataLoadingStatus');
 
-export const authorizeUser = createAction<User>('user/authorize');
-
 export const clearUserData = createAction('user/clearData');
 
 export const setUserData = createAction<User>('user/setData');

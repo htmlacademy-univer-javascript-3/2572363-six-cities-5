@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute } from '../../const.ts';
 import Main from '../../pages/main/main.tsx';
 import Login from '../../pages/login/login.tsx';
-import OfferPage from '../../pages/offer/offerPage.tsx';
+import OfferPage from '../../pages/offer-page/offer-page.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../../hocs/private-route/private-route.tsx';

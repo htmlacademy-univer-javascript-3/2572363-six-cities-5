@@ -1,4 +1,3 @@
-import {Goods} from './goods.ts';
 import {City} from './map.ts';
 import {User} from './user.ts';
 
@@ -33,7 +32,7 @@ export type DetailedOffer = Offer & {
   description: string;
   bedrooms: number;
   maxAdults: number;
-  goods: Goods;
+  goods: string[];
   host: User;
 }
 
