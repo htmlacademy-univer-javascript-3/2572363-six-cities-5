@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { Offers } from '../../types/offer.ts';
 import { useEffect, useState } from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchFavorites} from '../../store/api-actions.ts';
-import {FavoriteCardsList} from '../../components/favorite-cards-list/favorite-cards-liist.tsx';
+import { FavoriteCardsList } from '../../components/favorite-cards-list/favorite-cards-liist.tsx';
 
 export default function Favorites() {
   const dispatch = useAppDispatch();

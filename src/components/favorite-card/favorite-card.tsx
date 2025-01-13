@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { changeFavoriteState } from '../../store/api-actions.ts';
 import { Link } from 'react-router-dom';
 import { capitalizeFirstLetter, toStarsWidth } from '../../services/utils.tsx';
-import PrivateElement from '../../hocs/private-element/private-element.tsx';
+import PrivateButton from '../../hocs/private-button/private-button.tsx';
 
 export type FavoriteCardProps = {
   offer: Offer;
@@ -41,21 +41,21 @@ export function FavoriteCard({ offer }: FavoriteCardProps) {
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <PrivateElement>
+          <PrivateButton onClick={() => {
+            setIsFavorite(!isFavorite);
+            setIsChangedFavorite(true);
+          }}
+          >
             <button
               className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
               type="button"
-              onClick={() => {
-                setIsFavorite(!isFavorite);
-                setIsChangedFavorite(true);
-              }}
             >
               <svg className="place-card__bookmark-icon" width="18" height="19">
                 <use xlinkHref="#icon-bookmark"></use>
               </svg>
               <span className="visually-hidden">{isFavorite ? 'Remove from bookmarks' : 'To bookmarks'}</span>
             </button>
-          </PrivateElement>
+          </PrivateButton>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

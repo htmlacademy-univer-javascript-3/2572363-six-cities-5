@@ -1,13 +1,13 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {AxiosInstance} from 'axios';
-import {AppDispatch, State} from '../types/state.ts';
-import {DetailedOffer, Offers} from '../types/offer.ts';
-import {APIRoute, AuthorizationStatus} from '../const.ts';
-import {clearUserData, setOffers, requireAuthorization, setUserData, setFavoritesCount} from './action.ts';
-import {AuthData, LoginResponse} from '../types/authorization.ts';
-import {dropToken, saveToken} from '../services/token.ts';
-import {Comment, Comments} from '../types/comment.ts';
-import {User} from '../types/user.ts';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosInstance } from 'axios';
+import { AppDispatch, State } from '../types/state.ts';
+import { DetailedOffer, Offers } from '../types/offer.ts';
+import { APIRoute, AuthorizationStatus } from '../const.ts';
+import { clearUserData, setOffers, requireAuthorization, setUserData, setFavoritesCount } from './action.ts';
+import { AuthData, LoginResponse } from '../types/authorization.ts';
+import { dropToken, dropUser, getToken, getUser, saveToken, saveUser } from '../services/localStorage.ts';
+import { Comment, Comments } from '../types/comment.ts';
+import { User } from '../types/user.ts';
 
 export const fetchOffers = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -131,10 +131,28 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   'user/login',
   async ({login: email, password}, {dispatch, extra: api}) => {
     const {data} = await api.post<LoginResponse>(APIRoute.Login, {email, password});
+    const user = { name: data.name, email: data.email, isPro: data.isPro, avatarUrl: data.avatarUrl };
     saveToken(data.token);
     dispatch(requireAuthorization(AuthorizationStatus.Authorized));
-    dispatch(setUserData({
-      name: data.name, email: data.email, isPro: data.isPro, avatarUrl: data.avatarUrl}));
+    dispatch(setUserData(user));
+    saveUser(user);
+  },
+);
+
+export const restoreSessionData = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/restoreSessionData',
+  (_, { dispatch }) => {
+    const token = getToken();
+    const userString = getUser();
+    if (userString && token) {
+      const user = JSON.parse(userString) as User;
+      dispatch(requireAuthorization(AuthorizationStatus.Authorized));
+      dispatch(setUserData(user));
+    }
   },
 );
 
@@ -147,6 +165,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dropToken();
+    dropUser();
     dispatch(requireAuthorization(AuthorizationStatus.Unauthorized));
     dispatch(clearUserData());
   },

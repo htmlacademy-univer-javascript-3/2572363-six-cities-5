@@ -1,5 +1,5 @@
 import { AuthorizationStatus } from '../../const.ts';
-import {useAppSelector} from '../../hooks';
+import { useAppSelector } from '../../hooks';
 
 type PrivateElementProps = {
   children: JSX.Element;

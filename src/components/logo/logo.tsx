@@ -1,5 +1,5 @@
-import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const.ts';
 
 export default function Logo() {
   return (

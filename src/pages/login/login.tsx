@@ -1,17 +1,20 @@
 import { Helmet } from 'react-helmet-async';
-import Logo from '../../components/logo/logo.tsx';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { AppRoute, AuthorizationStatus, Cities } from '../../const.ts';
 import { checkAuthAction, loginAction } from '../../store/api-actions.ts';
-import {FormEvent, useEffect, useState} from 'react';
+import Logo from '../../components/logo/logo.tsx';
+import { toast, ToastContainer } from 'react-toastify';
+import { FormEvent, useEffect, useState } from 'react';
+import { setCity } from '../../store/action.ts';
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const randomCity = Cities[Math.floor(Math.random() * Cities.length)];
 
   useEffect(() => {
     dispatch(checkAuthAction());
@@ -23,9 +26,24 @@ export default function Login() {
     }
   }, [authStatus, navigate]);
 
-  const handleSubmit = (e: FormEvent) => {
+  function isPasswordValid(pass: string) {
+    return /^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]+$/.test(pass);
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(loginAction({ login: email, password: password }));
+
+    if (!isPasswordValid(currentPassword)){
+      toast.error('Password must contain at least one letter and one number.');
+      return;
+    }
+
+    dispatch(loginAction({ login: currentEmail, password: currentPassword }));
+  };
+
+  const handleRandomCityClick = () => {
+    dispatch(setCity(randomCity));
+    navigate(AppRoute.Main);
   };
 
   return (
@@ -56,8 +74,8 @@ export default function Login() {
                   name="email"
                   placeholder="Email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={currentEmail}
+                  onChange={(e) => setCurrentEmail(e.target.value)}
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -68,8 +86,8 @@ export default function Login() {
                   name="password"
                   placeholder="Password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">
@@ -79,13 +97,14 @@ export default function Login() {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
+              <a className="locations__item-link" href="#" onClick={() => handleRandomCityClick()}>
+                <span>{randomCity.name}</span>
               </a>
             </div>
           </section>
         </div>
       </main>
+      <ToastContainer />
     </div>
   );
 }

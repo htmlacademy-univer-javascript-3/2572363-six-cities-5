@@ -4,17 +4,18 @@ import { Offer, Offers } from '../../types/offer.ts';
 import { useEffect, useState } from 'react';
 import { Locations } from '../../components/location/location.tsx';
 import Map from '../../components/map/map.tsx';
-import { cities } from '../../mocks/cities.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {setCity, setDataLoadingStatus} from '../../store/action.ts';
+import { setCity, setDataLoadingStatus } from '../../store/action.ts';
 import { sortOffers } from '../../api/offers.api.ts';
 import SortOptions from '../../components/sort-options/sort-options.tsx';
 import { SortOption } from '../../components/sort-options/sort-option.ts';
 import LoadingScreen from '../loading-screen/loading-screen.tsx';
 import { fetchOffers } from '../../store/api-actions.ts';
+import { Cities } from '../../const.ts';
 
 export default function Main() {
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const city = useAppSelector((state) => state.city);
   const offers = useAppSelector((state) => state.offers);
   const [currentOffers, setCurrentOffers] = useState<Offers>([]);
@@ -26,7 +27,7 @@ export default function Main() {
     dispatch(setDataLoadingStatus(true));
     dispatch(fetchOffers());
     dispatch(setDataLoadingStatus(false));
-  }, [dispatch]);
+  }, [dispatch, authorizationStatus]);
 
   useEffect(() => {
     const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
@@ -54,7 +55,7 @@ export default function Main() {
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <Locations locations={cities} handleClick={(selectedCity) => dispatch(setCity(selectedCity))} />
+              <Locations locations={Cities} onClick={(selectedCity) => dispatch(setCity(selectedCity))} />
             </section>
           </div>
           <div className="cities">
@@ -65,7 +66,7 @@ export default function Main() {
                 <SortOptions onSort={handleSort} activeSortOption={activeSortOption} />
                 <PlaceCardsList
                   offers={currentOffers}
-                  handleOfferHovered={(selectedOffer) => setActiveOffer(selectedOffer)}
+                  onOfferHovered={(selectedOffer) => setActiveOffer(selectedOffer)}
                 />
               </section>
               <div className="cities__right-section">

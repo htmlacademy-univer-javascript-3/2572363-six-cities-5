@@ -4,13 +4,14 @@ import NotFound from '../not-found/not-found.tsx';
 import { NearPlaces } from '../../components/near-places/near-places.tsx';
 import CommentForm from '../../components/comment-form/comment-form.tsx';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {changeFavoriteState, fetchComments, fetchNearbyOffers, fetchOffer} from '../../store/api-actions.ts';
+import { changeFavoriteState, fetchComments, fetchNearbyOffers, fetchOffer } from '../../store/api-actions.ts';
 import { useEffect, useState } from 'react';
 import { DetailedOffer, Offers } from '../../types/offer.ts';
 import { Comments } from '../../types/comment.ts';
 import { capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth } from '../../services/utils.tsx';
 import Map from '../../components/map/map.tsx';
 import { setDataLoadingStatus } from '../../store/action.ts';
+import PrivateButton from '../../hocs/private-button/private-button.tsx';
 import PrivateElement from '../../hocs/private-element/private-element.tsx';
 
 export default function OfferPage() {
@@ -57,8 +58,8 @@ export default function OfferPage() {
   }, [needFetchComments, dispatch, offerId]);
 
   useEffect(() => {
-    if (isChangedFavorite){
-      dispatch(changeFavoriteState({offerId: currentOffer!.id, isFavorite: currentOffer!.isFavorite}));
+    if (isChangedFavorite) {
+      dispatch(changeFavoriteState({ offerId: currentOffer!.id, isFavorite: currentOffer!.isFavorite }));
       setIsChangedFavorite(false);
     }
   }, [isChangedFavorite, dispatch, currentOffer]);
@@ -155,20 +156,20 @@ export default function OfferPage() {
                 <h1 className="offer__name">
                   {currentOffer.title}
                 </h1>
-                <PrivateElement>
+                <PrivateButton onClick={() => {
+                  setCurrentOffer({ ...currentOffer, isFavorite: !currentOffer.isFavorite });
+                  setIsChangedFavorite(true);
+                }}
+                >
                   <button className={`button offer__bookmark-button ${currentOffer.isFavorite ? 'offer__bookmark-button--active' : ''}`}
                     type="button"
-                    onClick={() => {
-                      setCurrentOffer({...currentOffer, isFavorite: !currentOffer.isFavorite});
-                      setIsChangedFavorite(true);
-                    }}
                   >
                     <svg className="offer__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
                     <span className="visually-hidden">To bookmarks</span>
                   </button>
-                </PrivateElement>
+                </PrivateButton>
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">

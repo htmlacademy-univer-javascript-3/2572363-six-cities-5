@@ -1,4 +1,4 @@
-import {User} from './user.ts';
+import { User } from './user.ts';
 
 export type AuthData = {
   login: string;

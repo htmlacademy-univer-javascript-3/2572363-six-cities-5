@@ -1,6 +1,6 @@
 import cn from 'classnames';
-import {useState} from 'react';
-import {SortOption} from './sort-option.ts';
+import { useState } from 'react';
+import { SortOption } from './sort-option.ts';
 
 type SortOptionsProps = {
   onSort: (sortOption: SortOption) => void;
@@ -8,7 +8,7 @@ type SortOptionsProps = {
 }
 
 export default function SortOptions(props: SortOptionsProps) {
-  const {onSort, activeSortOption} = props;
+  const { onSort, activeSortOption } = props;
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   const handleOptionClick = (sortOption: SortOption) => {

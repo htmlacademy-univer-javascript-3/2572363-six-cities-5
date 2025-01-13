@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
-import {getToken} from '../services/token.ts';
+import { getToken } from '../services/localStorage.ts';
 
 const BACKEND_URL = 'https://14.design.htmlacademy.pro/six-cities';
 const REQUEST_TIMEOUT = 5000;

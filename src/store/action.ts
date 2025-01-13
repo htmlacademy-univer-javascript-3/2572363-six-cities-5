@@ -1,10 +1,10 @@
-import {createAction} from '@reduxjs/toolkit';
-import {City} from '../types/map.ts';
-import {Offers} from '../types/offer.ts';
-import {AuthorizationStatus} from '../const.ts';
-import {User} from '../types/user.ts';
+import { createAction } from '@reduxjs/toolkit';
+import { Offers } from '../types/offer.ts';
+import { AuthorizationStatus } from '../const.ts';
+import { User } from '../types/user.ts';
+import { City } from '../types/map.ts';
 
-export const setCity = createAction('data/setCity', (value: City) => ({payload: value}));
+export const setCity = createAction<City>('data/setCity');
 
 export const setOffers = createAction<Offers>('data/setOffers');
 

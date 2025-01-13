@@ -1,4 +1,4 @@
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 export const splitTextIntoParagraphs = (text: string, classname: string) => text.split('\n').map((line) => (
   <p key={line} className={classname}>

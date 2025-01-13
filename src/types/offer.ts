@@ -1,5 +1,5 @@
-import {City} from './map.ts';
-import {User} from './user.ts';
+import { City } from './map.ts';
+import { User } from './user.ts';
 
 export type Coordinates = {
   latitude: number;

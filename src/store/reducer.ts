@@ -1,4 +1,4 @@
-import {createReducer} from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   clearUserData,
   setOffers,
@@ -6,11 +6,10 @@ import {
   setCity,
   setDataLoadingStatus, setUserData, setFavoritesCount
 } from './action.ts';
-import {cities} from '../mocks/cities.ts';
-import {Offers} from '../types/offer.ts';
-import {City} from '../types/map.ts';
-import {AuthorizationStatus} from '../const.ts';
-import {User} from '../types/user.ts';
+import { Offers } from '../types/offer.ts';
+import { City } from '../types/map.ts';
+import { AuthorizationStatus, Cities } from '../const.ts';
+import { User } from '../types/user.ts';
 
 type InitialState = {
   city: City;
@@ -22,7 +21,7 @@ type InitialState = {
 }
 
 const initialState: InitialState = {
-  city: cities[0],
+  city: Cities[0],
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: true,

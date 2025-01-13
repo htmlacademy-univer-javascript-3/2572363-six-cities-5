@@ -1,5 +1,5 @@
-import {Offer, Offers} from '../../types/offer.ts';
-import {Link} from 'react-router-dom';
+import { Offer, Offers } from '../../types/offer.ts';
+import { Link } from 'react-router-dom';
 
 export type NearPlaceProps = {
   offer: Offer;
