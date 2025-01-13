@@ -1,12 +1,27 @@
 import { Offer, Offers } from '../../types/offer.ts';
 import { Link } from 'react-router-dom';
+import { toStarsWidth } from '../../services/utils.tsx';
+import PrivateButton from '../../hocs/private-button/private-button.tsx';
+import { useAppDispatch } from '../../hooks';
+import { useEffect, useState } from 'react';
+import { changeFavoriteState } from '../../store/api-actions.ts';
 
 export type NearPlaceProps = {
   offer: Offer;
 }
 
 export function NearPlace({ offer }: NearPlaceProps) {
+  const dispatch = useAppDispatch();
+  const [isFavorite, setIsFavorite] = useState<boolean>(offer.isFavorite);
+  const [isChangedFavorite, setIsChangedFavorite] = useState<boolean>(false);
   const offerLink = `/offer/${offer.id}`;
+
+  useEffect(() => {
+    if (isChangedFavorite){
+      dispatch(changeFavoriteState({offerId: offer.id, isFavorite: isFavorite}));
+      setIsChangedFavorite(false);
+    }
+  }, [isChangedFavorite, dispatch, isFavorite, offer.id]);
 
   return (
     <article className="near-places__card place-card">
@@ -21,16 +36,27 @@ export function NearPlace({ offer }: NearPlaceProps) {
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">In bookmarks</span>
-          </button>
+          <PrivateButton onClick={() => {
+            setIsFavorite(!isFavorite);
+            setIsChangedFavorite(true);
+          }}
+          >
+            <button
+              className={`place-card__bookmark-button button ${isFavorite
+                ? 'place-card__bookmark-button--active'
+                : ''}`}
+              type="button"
+            >
+              <svg className="place-card__bookmark-icon" width="18" height="19">
+                <use xlinkHref="#icon-bookmark"></use>
+              </svg>
+              <span className="visually-hidden">{isFavorite ? 'Remove from bookmarks' : 'To bookmarks'}</span>
+            </button>
+          </PrivateButton>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${Math.round(offer.rating) * 20}%`}}></span>
+            <span style={{width: toStarsWidth(offer.rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

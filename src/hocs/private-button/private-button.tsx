@@ -1,6 +1,6 @@
-import { AuthorizationStatus } from '../../const.ts';
+import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import { useAppSelector } from '../../hooks';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 type PrivateElementProps = {
   children: JSX.Element;
@@ -9,11 +9,12 @@ type PrivateElementProps = {
 
 export default function PrivateButton(props: PrivateElementProps) {
   const { children, onClick } = props;
+  const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
   const handleClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Authorized) {
-      toast.error('Необходимо авторизоваться');
+      navigate(AppRoute.Login);
     } else {
       onClick();
     }

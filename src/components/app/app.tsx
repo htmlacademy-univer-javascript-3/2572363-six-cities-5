@@ -8,22 +8,24 @@ import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../../hocs/private-route/private-route.tsx';
 import Layout from '../layout/layout.tsx';
-import {restoreSessionData} from '../../store/api-actions.ts';
-import {useEffect} from 'react';
-import {useAppDispatch} from '../../hooks';
+import { fetchFavorites, restoreSessionData } from '../../store/api-actions.ts';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export default function App() {
   const dispatch = useAppDispatch();
+  const favoritesCount = useAppSelector((state) => state.favoritesCount);
 
   useEffect(() => {
     dispatch(restoreSessionData());
+    dispatch(fetchFavorites);
   }, [dispatch]);
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
+          <Route element={<Layout favoritesCount={favoritesCount}/>}>
             <Route index element={<Main />} />
             <Route
               path={AppRoute.Favorites}
